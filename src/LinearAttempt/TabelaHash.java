@@ -1,5 +1,5 @@
 
-package TentativaLinear;
+package LinearAttempt;
 
 import java.util.Scanner;
 
