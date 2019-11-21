@@ -1,6 +1,8 @@
 package LinearAttempt;
 
 import java.lang.reflect.Array;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 public class HashTable<T extends IHashable> {
 
@@ -24,10 +26,9 @@ public class HashTable<T extends IHashable> {
             System.out.println("The table is full!");
         }
     }
+    public void Remove(T value,Function<T,Boolean> func) {
 
-    public void Remove(T value) {
-
-        int position = search(value);
+        int position = search(value,func);
         
         if (position < elements.length) {
             elements[position].setStatus(HashStatus.REMOVED);
@@ -35,20 +36,46 @@ public class HashTable<T extends IHashable> {
             System.out.println("The Element is not present.");
         }
     }
+//    public void Remove(T value) {
+//
+//        int position = search(value);
+//        
+//        if (position < elements.length) {
+//            elements[position].setStatus(HashStatus.REMOVED);
+//        } else {
+//            System.out.println("The Element is not present.");
+//        }
+//    }
     
-    public int search(T value){
+    public int search(T value,Function<T,Boolean> func){
         
         int position = HashingFunction(value);
         
         int treatmentCoefficient = getTreatmentCoefficientToSearch(position, value);
         
-        if(elements[(position + treatmentCoefficient) % elements.length].getKey() == value.getKey()
-           && elements[(position + treatmentCoefficient) % elements.length].getStatus() != HashStatus.REMOVED)
+        Element element = elements[(position + treatmentCoefficient) % elements.length];
+        
+        if(element.getKey() == value.getKey()
+           && element.getStatus() != HashStatus.REMOVED
+           && func.apply((T)element.getValue()))
             
            return (position + treatmentCoefficient) % elements.length;
         else
             return elements.length; //Element not found.
     }
+//    public int search(T value){
+//        
+//        int position = HashingFunction(value);
+//        
+//        int treatmentCoefficient = getTreatmentCoefficientToSearch(position, value);
+//        
+//        if(elements[(position + treatmentCoefficient) % elements.length].getKey() == value.getKey()
+//           && elements[(position + treatmentCoefficient) % elements.length].getStatus() != HashStatus.REMOVED)
+//            
+//           return (position + treatmentCoefficient) % elements.length;
+//        else
+//            return elements.length; //Element not found.
+//    }
     
     public void showHashTable(){
         
