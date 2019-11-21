@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
       
        int hashTableSize = 20;
-       HashTable hashTable = new HashTable(hashTableSize);
+       HashTable hashTable = new HashTable(Friend.class, hashTableSize);
        Scanner entrada = new Scanner(System.in);
        
        do

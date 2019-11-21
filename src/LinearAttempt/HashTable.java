@@ -1,91 +1,95 @@
 package LinearAttempt;
 
-public class HashTable {
+import java.lang.reflect.Array;
 
-    private Object[] keys;
-    private Object[] values;
-    private Status[] status;
-    private int hashTableSize;
+public class HashTable<T extends IHashable> {
 
-    public HashTable(int hashTableSize) {
-        this.hashTableSize = hashTableSize;
-        keys = new Object[hashTableSize];
-        values = new Object[hashTableSize];
-        status = new Status[hashTableSize];
+    private Element<T>[] elements; 
+    
+    public HashTable(Class<T> c, int hashTableSize) {
+        @SuppressWarnings("unchecked")
+        final Element<T>[] elements = (Element<T>[]) Array.newInstance(c, hashTableSize);
+        this.elements = elements;
         initializationHashTable();
     }
+    
+    public void Insert(T value) {
 
-    public void Insert(Object key, Object value) {
-
-        int i = 0;
-        int position = HashingFunction(key);
-        while (i < hashTableSize && status[(position + i) % hashTableSize].equals(Status.BUSY)) {
-            i += 1;
-        }
-
-        if (i > hashTableSize) {
-            keys[(position + i) % hashTableSize] = key;
-            values[(position + i) % hashTableSize] = value;
-            status[(position + i) % hashTableSize] = Status.BUSY;
+        int position = HashingFunction(value);
+        int treatmentCoefficient = getTreatmentCoefficientToInsert(position);
+        
+        if (treatmentCoefficient < elements.length) {
+            elements[(position + treatmentCoefficient) % elements.length] = new Element<T>(value, value.getKey(), HashStatus.BUSY);
         } else {
             System.out.println("The table is full!");
         }
     }
 
-    public void Remove(Object key) {
+    public void Remove(T value) {
 
-        int i = 0;
-        int position = search(key);
-        while (i < hashTableSize && status[(position + i) % hashTableSize].equals(Status.BUSY)) {
-            i += 1;
-        }
-
-        if (i > hashTableSize) {
-            keys[(position + i) % hashTableSize] = key;
-            status[(position + i) % hashTableSize] = Status.BUSY;
+        int position = search(value);
+        
+        if (position < elements.length) {
+            elements[position].setStatus(HashStatus.REMOVED);
         } else {
-            System.out.println("The table is full!");
+            System.out.println("The Element is not present.");
         }
     }
     
-    public int search(Object key){
+    public int search(T value){
         
-        int i = 0;
-        int position = HashingFunction(key);
+        int position = HashingFunction(value);
         
-        while(i < hashTableSize
-              && status[(position + i) % hashTableSize] != Status.FREE
-              && keys[(position + i) % hashTableSize] != key)
-            i += 1;
+        int treatmentCoefficient = getTreatmentCoefficientToSearch(position, value);
         
-        if(keys[(position + i) % hashTableSize] == key
-           && status[(position + i) % hashTableSize] != Status.REMOVED)
-            return (position + i) % hashTableSize;
+        if(elements[(position + treatmentCoefficient) % elements.length].getKey() == value.getKey()
+           && elements[(position + treatmentCoefficient) % elements.length].getStatus() != HashStatus.REMOVED)
+            
+           return (position + treatmentCoefficient) % elements.length;
         else
-            return hashTableSize; //Element not found.
+            return elements.length; //Element not found.
     }
     
     public void showHashTable(){
         
-        for(int i = 0; i < hashTableSize; i++){
+        for(int i = 0; i < elements.length; i++){
             
-            if(status[i] == Status.BUSY){
+            if(elements[i].getStatus().equals(HashStatus.BUSY)){
                 System.out.println("Input " + i + ": "
-                                   + keys[i] + " " 
-                                   + status[i]);
+                                   + elements[i].getKey() + " " 
+                                   + elements[i].getStatus());
             }
         }
     }
     
-    private int HashingFunction(Object key) {
+    private int HashingFunction(T value) {
 
-        return (int) key % hashTableSize;
+        return value.getKey() % elements.length;
     }
     
     private void initializationHashTable(){
         
-        for(int i = 0; i < hashTableSize; i++){
-            status[i] = Status.FREE;
+        for(int i = 0; i < elements.length; i++){
+            elements[i] = new Element<T>();
         }
+    }
+    
+    private int getTreatmentCoefficientToInsert(int position){
+        
+        int i = 0;
+        while(i < elements.length 
+              && elements[(position + i) % elements.length].getStatus().equals(HashStatus.BUSY))
+              i += 1;
+        return i;
+    }
+    
+    private int getTreatmentCoefficientToSearch(int position, T value){
+        
+        int i = 0;
+        while(i < elements.length 
+              && elements[(position + i) % elements.length].getStatus() != HashStatus.FREE
+              && elements[(position + i) % elements.length].getKey() != value.getKey())
+              i += 1;
+        return i;
     }
 }
