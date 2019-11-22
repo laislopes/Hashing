@@ -1,14 +1,16 @@
 
-package LinearAttempt;
+package Exercicio2_TentativaQuadratica;
 
-public class Element<T>{
+import Exercicio1_TentativaLinear.*;
 
-    private T value;
+public class Element{
+
+    private Friend friend;
     private int key;
     private HashStatus status;    // F = Free, B = Busy, R = Removed
 
-    public Element(T value, int key, HashStatus status) {
-        this.value = value;
+    public Element(Friend friend, int key, HashStatus status) {
+        this.friend = friend;
         this.key = key;
         this.status = status;
     }
@@ -17,12 +19,12 @@ public class Element<T>{
         this.status = HashStatus.FREE;
     }
 
-    public T getValue() {
-        return value;
+    public Friend getFriend() {
+        return friend;
     }
 
-    public void setValue(T value) {
-        this.value = value;
+    public void setFriend(Friend friend) {
+        this.friend = friend;
     }
 
     public int getKey() {

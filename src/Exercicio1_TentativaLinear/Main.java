@@ -1,4 +1,4 @@
-package LinearAttempt;
+package Exercicio1_TentativaLinear;
 
 public class Main {
     
@@ -6,12 +6,12 @@ public class Main {
       
        int hashTableSize = 20;
        int menuOption = 0;
-       HashTable hashTable = new HashTable(Friend.class, hashTableSize);
-           
+       HashTable hashTable = new HashTable(hashTableSize);
+       UserInterface userInterface = new UserInterface();
+       
        while(menuOption != 6){
            
-           UserInterface.MainMenuExercise1();
-           menuOption = input.nextInt();
+           menuOption = userInterface.MainMenuExercise1(hashTable);
            
            
        }

@@ -1,8 +1,10 @@
 
-package LinearAttempt;
+package Exercicio2_TentativaQuadratica;
+
+import Exercicio1_TentativaLinear.*;
 
 
-public class Friend implements IHashable{
+public class Friend {
    
     private String name;
     private int birthDay;
@@ -48,8 +50,9 @@ public class Friend implements IHashable{
         this.birthYear = birthYear;
     }
     
-    @Override
-    public int getKey() {
-        return this.birthMonth;
+    public String getFullBirthday(){
+        
+        return getBirthDay() + "/" + getBirthMonth() + "/" + getBirthYear();
+                
     }
 }

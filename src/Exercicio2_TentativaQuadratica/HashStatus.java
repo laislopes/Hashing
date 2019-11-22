@@ -1,4 +1,6 @@
-package LinearAttempt;
+package Exercicio2_TentativaQuadratica;
+
+import Exercicio1_TentativaLinear.*;
 
 
 public enum HashStatus {
