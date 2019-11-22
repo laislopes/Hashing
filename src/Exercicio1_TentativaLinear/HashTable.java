@@ -36,11 +36,11 @@ public class HashTable {
 
     public void removeBirthdaysOfTheMonth(int month) {
 
-        int[] keysBirthdaysOfTheMonth = consultBirthdaysOfTheMonth(month);
+        int[] IndexesBirthdaysOfTheMonth = consultBirthdaysOfTheMonth(month);
         
-        for (int i = 0; i < keysBirthdaysOfTheMonth.length; i++) {
-            if (keysBirthdaysOfTheMonth[i] != -1) {
-                elements[keysBirthdaysOfTheMonth[i]].setStatus(HashStatus.REMOVED);
+        for (int i = 0; i < IndexesBirthdaysOfTheMonth.length; i++) {
+            if (IndexesBirthdaysOfTheMonth[i] != -1) {
+                elements[IndexesBirthdaysOfTheMonth[i]].setStatus(HashStatus.REMOVED);
             }
         }
     }
@@ -125,7 +125,7 @@ public class HashTable {
 
     public int[] consultBirthdaysOfTheMonth(int month) {
 
-        int[] keysBirthdaysOfTheMonth = initializeKeysBirthdaysOfTheMonth();
+        int[] IndexesBirthdaysOfTheMonth = initializeIndexesBirthdaysOfTheMonth();
 
         int BirthdaysOfTheMonth = 0;
         System.out.println("Aniversariantes do Mês " + month + ": Nome\tData de Nascimento\n");
@@ -136,7 +136,7 @@ public class HashTable {
                     System.out.println(elements[i].getFriend().getName() + "\t"
                             + elements[i].getFriend().getFullBirthday() + "\n");
                     BirthdaysOfTheMonth++;
-                    keysBirthdaysOfTheMonth[i] = i;
+                    IndexesBirthdaysOfTheMonth[i] = i;
                 }
             }
         }
@@ -145,15 +145,15 @@ public class HashTable {
             System.out.println("\nNão há nenhum aniversariante no mês consultado.");
         }
 
-        return keysBirthdaysOfTheMonth;
+        return IndexesBirthdaysOfTheMonth;
     }
 
-    private int[] initializeKeysBirthdaysOfTheMonth() {
-        int[] keysBirthdaysOfTheMonth = new int[20];
-        for (int i = 0; i < keysBirthdaysOfTheMonth.length; i++) {
-            keysBirthdaysOfTheMonth[i] = -1;
+    private int[] initializeIndexesBirthdaysOfTheMonth() {
+        int[] IndexesBirthdaysOfTheMonth = new int[20];
+        for (int i = 0; i < IndexesBirthdaysOfTheMonth.length; i++) {
+            IndexesBirthdaysOfTheMonth[i] = -1;
         }
-        return keysBirthdaysOfTheMonth;
+        return IndexesBirthdaysOfTheMonth;
     }
 
     public int countPeopleOver18() {

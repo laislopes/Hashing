@@ -47,10 +47,6 @@ public class UserInterface {
                  System.out.println("Opção inválida");
                  break;
                     
-                
-                
-                
-                
         }
         
         return menuOption;

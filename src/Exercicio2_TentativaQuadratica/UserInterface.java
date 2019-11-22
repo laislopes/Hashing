@@ -7,7 +7,7 @@ public class UserInterface {
     Scanner input = new Scanner(System.in);
     int menuOption = 0;
     
-    public int MainMenuExercise1(HashTable hashTable) {
+    public int MainMenuExercise2(HashTable hashTable) {
 
         System.out.println("Exercício 2 - Lista 2 ED2\n\n" + 
                            "Menu:\n" +
@@ -24,27 +24,25 @@ public class UserInterface {
         switch(menuOption){
             
             case 1:
-                hashTable.insert(ReadFriend());
+                System.out.println("Digite o nome da pessoa: ");
+                hashTable.insert(new Person(input.next()));
                 break;
             case 2:
-                System.out.println("Digite um mês para consultar os aniversariantes: ");
-                hashTable.consultBirthdaysOfTheMonth(input.nextInt());
+                hashTable.showHashTable();
                 break;
             case 3:
-                System.out.println("Quantidade de pessoas com idade superior a 18 anos: " + hashTable.countPeopleOver18());
+                System.out.println("Digite o nome da pessoa para consultá-la: ");
+                hashTable.consultPersonByName(input.next());
                 break;
             case 4:
-                System.out.println("Digite o nome de um amigo para removê-lo: ");
-                hashTable.removeByName(input.next());
+                System.out.println("Digite uma letra para consultar pessoas que possuem essa letra como inicial: ");
+                hashTable.consultPeopleByFirstLetterName(input.next());
                 break;
             case 5:
-                System.out.println("Digite um mês para remover os aniversariantes: ");
-                hashTable.removeBirthdaysOfTheMonth(input.nextInt());
+                System.out.println("Digite o nome de uma pessoa para removê-la: ");
+                hashTable.removeByKey(input.next());
                 break;
              case 6:
-                break;
-            case 7:
-                hashTable.showHashTable();
                 break;
              default:
                  System.out.println("Opção inválida");
@@ -58,22 +56,5 @@ public class UserInterface {
         
         return menuOption;
     }
-    
-    private Friend ReadFriend(){
-
-        System.out.println("Digite o nome do seu amigo: ");
-        String name = input.next();
-        System.out.println("\nDigite o dia do nascimento do seu amigo no formato dd: ");
-        int birthDay = input.nextInt();
-        System.out.println("\nDigite o mês do nascimento do seu amigo no formato MM: ");
-        int birthMonth = input.nextInt();
-        System.out.println("\nDigite o ano do nascimento do seu amigo no formato yyyy: ");
-        int birthYear = input.nextInt();
-        
-        return new Friend(name, birthDay, birthMonth, birthYear);
-    }
-    
-  
-    
 
 }

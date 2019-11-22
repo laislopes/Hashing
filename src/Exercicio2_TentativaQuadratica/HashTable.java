@@ -1,8 +1,5 @@
 package Exercicio2_TentativaQuadratica;
 
-import Exercicio1_TentativaLinear.*;
-import java.util.Calendar;
-
 public class HashTable {
 
     private Element[] elements;
@@ -12,65 +9,52 @@ public class HashTable {
         initializationHashTable();
     }
 
-    public void insert(Friend friend) {
-
-        int position = HashingFunction(friend.getBirthMonth());
-        int treatmentCoefficient = getTreatmentCoefficientToInsert(position);
-
-        if (treatmentCoefficient < elements.length) {
-            elements[(position + treatmentCoefficient) % elements.length] = new Element(friend, friend.getBirthMonth(), HashStatus.BUSY);
+    public void insert(Person person) {
+        
+        int key = person.getName().charAt(0);
+        int position = HashingFunction(key);
+        int k = 1;
+        
+        while (k <= elements.length
+                && elements[position].getStatus().equals(HashStatus.BUSY)) {
+            position = (position + k) % elements.length;
+            k++;
+        }
+        if (k <= elements.length) {
+            elements[position] = new Element(person, key, HashStatus.BUSY);
         } else {
             System.out.println("A tabela está cheia!");
         }
     }
 
-    public void removeByKey(int key) {
+    public void removeByKey(String name) {
 
-        int position = search(key);
+        int position = search(name);
 
         if (position < elements.length) {
             elements[position].setStatus(HashStatus.REMOVED);
         } else {
-            System.out.println("Amigo não encontrado na tabela.");
+            System.out.println("Pessoa não encontrada na tabela.");
         }
     }
 
-    public void removeBirthdaysOfTheMonth(int month) {
+    public int search(String name) {
 
-        int[] keysBirthdaysOfTheMonth = consultBirthdaysOfTheMonth(month);
+        int firstLetterName = name.charAt(0);
+        int position = HashingFunction(firstLetterName);
+        int k = 1;
         
-        for (int i = 0; i < keysBirthdaysOfTheMonth.length; i++) {
-            if (keysBirthdaysOfTheMonth[i] != -1) {
-                elements[keysBirthdaysOfTheMonth[i]].setStatus(HashStatus.REMOVED);
-            }
+        while (k < elements.length
+                && elements[position].getStatus() != HashStatus.FREE
+                && elements[position].getKey() != firstLetterName) {
+            position = (position + k) % elements.length;
+            k++;
         }
-    }
+        Element element = elements[position];
 
-    public void removeByName(String name) {
-        int key = 0;
-
-        for (Element element : elements) {
-            if (element.getStatus().equals(HashStatus.BUSY)) {
-                if (element.getFriend().getName().equals(name)) {
-                    key = element.getKey();
-                }
-            }
-        }
-
-        removeByKey(key);
-    }
-
-    public int search(int key) {
-
-        int position = HashingFunction(key);
-
-        int treatmentCoefficient = getTreatmentCoefficientToSearch(position, key);
-
-        Element element = elements[(position + treatmentCoefficient) % elements.length];
-
-        if (element.getKey() == key
+        if (element.getKey() == firstLetterName
                 && element.getStatus() != HashStatus.REMOVED) {
-            return (position + treatmentCoefficient) % elements.length;
+            return position;
         } else {
             return elements.length; //Element not found.
         }
@@ -79,15 +63,20 @@ public class HashTable {
     public void showHashTable() {
 
         System.out.println("HashTable:\n"
-                + "Position:\tKey\tStatus\n");
+                + "Position:\tKey\tStatus\t  Nome da Pessoa\n");
         for (int i = 0; i < elements.length; i++) {
+            
+            showElement(i);
+        }
+    }
 
-            if (elements[i].getStatus().equals(HashStatus.BUSY)) {
-
-                System.out.println(i + ":\t"
-                        + elements[i].getKey() + "\t"
-                        + elements[i].getStatus() + "\n");
-            }
+    private void showElement(int i) {
+        if (elements[i].getStatus().equals(HashStatus.BUSY)) {
+            
+            System.out.println(i + ":\t\t"
+                    + elements[i].getKey() + "\t"
+                    + elements[i].getStatus() + "\t  "
+                    + elements[i].getPerson().getName() + "\n");
         }
     }
 
@@ -103,70 +92,21 @@ public class HashTable {
         }
     }
 
-    private int getTreatmentCoefficientToInsert(int position) {
-
-        int i = 0;
-        while (i < elements.length
-                && elements[(position + i) % elements.length].getStatus().equals(HashStatus.BUSY)) {
-            i += 1;
-        }
-        return i;
+    public void consultPersonByName(String name){
+        
+        showElement(search(name));
     }
-
-    private int getTreatmentCoefficientToSearch(int position, int key) {
-
-        int i = 0;
-        while (i < elements.length
-                && elements[(position + i) % elements.length].getStatus() != HashStatus.FREE
-                && elements[(position + i) % elements.length].getKey() != key) {
-            i += 1;
-        }
-        return i;
-    }
-
-    public int[] consultBirthdaysOfTheMonth(int month) {
-
-        int[] keysBirthdaysOfTheMonth = initializeKeysBirthdaysOfTheMonth();
-
-        int BirthdaysOfTheMonth = 0;
-        System.out.println("Aniversariantes do Mês " + month + ": Nome\tData de Nascimento\n");
-        for (int i = 0; i < elements.length; i++) {
-
-            if (elements[i].getStatus().equals(HashStatus.BUSY)) {
-                if (elements[i].getFriend().getBirthMonth() == month) {
-                    System.out.println(elements[i].getFriend().getName() + "\t"
-                            + elements[i].getFriend().getFullBirthday() + "\n");
-                    BirthdaysOfTheMonth++;
-                    keysBirthdaysOfTheMonth[i] = i;
+    
+    public void consultPeopleByFirstLetterName(String name){
+        
+        System.out.println("\n");
+        for (Element element : elements) {
+            if (element.getStatus().equals(HashStatus.BUSY)) {
+                if (element.getPerson().getName().toUpperCase().charAt(0) == name.toUpperCase().charAt(0)) {
+                    System.out.println(element.getPerson().getName() + "\n");
                 }
             }
         }
-
-        if (BirthdaysOfTheMonth == 0) {
-            System.out.println("\nNão há nenhum aniversariante no mês consultado.");
-        }
-
-        return keysBirthdaysOfTheMonth;
     }
-
-    private int[] initializeKeysBirthdaysOfTheMonth() {
-        int[] keysBirthdaysOfTheMonth = new int[20];
-        for (int i = 0; i < keysBirthdaysOfTheMonth.length; i++) {
-            keysBirthdaysOfTheMonth[i] = -1;
-        }
-        return keysBirthdaysOfTheMonth;
-    }
-
-    public int countPeopleOver18() {
-
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int PeopleOver18 = 0;
-        for (Element element : elements) {
-            if (element.getStatus().equals(HashStatus.BUSY) && (year - element.getFriend().getBirthYear() > 18)) {
-                PeopleOver18++;
-            }
-        }
-        return PeopleOver18;
-    }
-
+    
 }
