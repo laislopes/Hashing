@@ -13,6 +13,7 @@ public class HashTable {
         int position = HashingFunction(student.getId());
         Element newElement = new Element(student, student.getId(), elements[position]);
         elements[position] = newElement;
+        System.out.println("\nAluno cadastrado com sucesso!");
     }
 
     public void removeByKey(Student student) {

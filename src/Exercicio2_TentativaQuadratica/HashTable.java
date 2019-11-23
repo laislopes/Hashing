@@ -22,6 +22,7 @@ public class HashTable {
         }
         if (k <= elements.length) {
             elements[position] = new Element(person, key, HashStatus.BUSY);
+            System.out.println("\nPessoa inserida com sucesso!");
         } else {
             System.out.println("A tabela está cheia!");
         }
@@ -33,6 +34,7 @@ public class HashTable {
 
         if (position < elements.length) {
             elements[position].setStatus(HashStatus.REMOVED);
+            System.out.println("Pessoa removida com sucesso!");
         } else {
             System.out.println("Pessoa não encontrada na tabela.");
         }

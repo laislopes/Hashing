@@ -18,6 +18,7 @@ public class HashTable {
 
         if (treatmentCoefficient < elements.length) {
             elements[(position + treatmentCoefficient) % elements.length] = new Element(friend, friend.getBirthMonth(), HashStatus.BUSY);
+            System.out.println("\nAmigo cadastrado com sucesso!");
         } else {
             System.out.println("A tabela está cheia!");
         }
@@ -29,6 +30,7 @@ public class HashTable {
 
         if (position < elements.length) {
             elements[position].setStatus(HashStatus.REMOVED);
+            System.out.println("Amigo removido com sucesso!");
         } else {
             System.out.println("Amigo não encontrado na tabela.");
         }
@@ -37,12 +39,15 @@ public class HashTable {
     public void removeBirthdaysOfTheMonth(int month) {
 
         int[] IndexesBirthdaysOfTheMonth = consultBirthdaysOfTheMonth(month);
+        int BirthdaysOfTheMonth = 0;
         
         for (int i = 0; i < IndexesBirthdaysOfTheMonth.length; i++) {
             if (IndexesBirthdaysOfTheMonth[i] != -1) {
                 elements[IndexesBirthdaysOfTheMonth[i]].setStatus(HashStatus.REMOVED);
+                BirthdaysOfTheMonth++;
             }
         }
+        if(BirthdaysOfTheMonth > 0) System.out.println("\nAniversariantes do Mês " + month + " removidos com sucesso!");
     }
 
     public void removeByName(String name) {
