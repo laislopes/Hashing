@@ -1,6 +1,4 @@
-
 package Exercicio1_TentativaLinear;
-
 
 public class Friend {
    

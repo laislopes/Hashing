@@ -1,4 +1,4 @@
-package Exercicio2_TentativaQuadratica;
+package Exercicio3_ListaEncadeada;
 
 public enum HashStatus {
     

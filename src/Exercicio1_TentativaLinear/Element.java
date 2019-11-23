@@ -1,7 +1,6 @@
-
 package Exercicio1_TentativaLinear;
 
-public class Element{
+public class Element {
 
     private Friend friend;
     private int key;
@@ -12,8 +11,8 @@ public class Element{
         this.key = key;
         this.status = status;
     }
-    
-    public Element(){
+
+    public Element() {
         this.status = HashStatus.FREE;
     }
 
@@ -32,7 +31,7 @@ public class Element{
     public void setKey(int key) {
         this.key = key;
     }
-    
+
     public HashStatus getStatus() {
         return status;
     }
@@ -40,5 +39,5 @@ public class Element{
     public void setStatus(HashStatus status) {
         this.status = status;
     }
-    
+
 }
